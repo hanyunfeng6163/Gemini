@@ -190,7 +190,7 @@
                 }
             };
             return {
-                single: false,
+                single: true,
                 switchCode: false,
                 sponsorship: false,
                 register: false,
