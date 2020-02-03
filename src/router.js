@@ -164,16 +164,16 @@ export const appRouter = [{
         component: resolve => {
           require(['./views/audit/queryAudit.vue'], resolve)
         }
-      },
-      {
-        path: 'perOrder',
-        name: 'perOrder',
-        title: '权限',
-        icon: 'md-share',
-        component: resolve => {
-          require(['./views/audit/permissions.vue'], resolve)
-        }
       }
+      // {
+      //   path: 'perOrder',
+      //   name: 'perOrder',
+      //   title: '权限',
+      //   icon: 'md-share',
+      //   component: resolve => {
+      //     require(['./views/audit/permissions.vue'], resolve)
+      //   }
+      // }
     ]
   },
   {
@@ -238,6 +238,15 @@ export const appRouter = [{
         icon: 'ios-switch',
         component: resolve => {
           require(['./views/management/authGroup.vue'], resolve)
+        }
+      },
+      {
+        path: 'roleGroup',
+        name: 'roleGroup',
+        title: '权限组',
+        icon: 'logo-google',
+        component: resolve => {
+          require(['./views/management/roleGroup.vue'], resolve)
         }
       },
       {

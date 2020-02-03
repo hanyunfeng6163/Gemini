@@ -31,21 +31,23 @@
   <div id="band" class="div-relative ">
     <nav class="navbar  bg-primary fixed-top navbar-transparent " color-on-scroll="400">
       <div class="container">
-        <div class="navbar-translate">
+        <div>
           <a class="navbar-brand">
-            版本号: v2.1.4
+            版本号: v2.1.9
           </a>
-          <Button v-if="switchCode" type="default" ghost @click="register= true">创建用户</Button>
+          <Button v-if="switchCode" type="default" ghost @click="register= true"> 注册</Button>
         </div>
         <div>
           <ul>
             <li>
-              <a class="nav-link" @click="sponsorship = true">赞助/技术协助</a>
+              <Button type="default" @click="sponsorship = true" ghost>赞助</Button>
             </li>
             <li>
-              <a href="https://github.com/cookieY/Yearning" target="_blank">
-                <Icon type="logo-github" size="30"/>
-              </a>
+              <div style="margin-left: 50%">
+                <a href="https://github.com/cookieY/Yearning" target="_blank">
+                  <Icon type="logo-github" size="30"/>
+                </a>
+              </div>
             </li>
           </ul>
         </div>
@@ -63,7 +65,7 @@
                                 <span class="input-group-addon">
                                    <Icon type="md-person"/>
                                 </span>
-                <input type="text" class="form-control" placeholder="账号" v-model="formInline.user">
+                <input type="text" class="form-control" placeholder="用户名" v-model="formInline.user">
               </div>
               <div class="input-group form-group-no-border input-lg">
                                 <span class="input-group-addon">
@@ -74,8 +76,9 @@
                        @keyup.enter="authdata"/>
               </div>
               <div class="footer text-center">
-                <Checkbox v-model="single">LDAP登录</Checkbox>
-                <a href="#pablo" class="btn btn-primary btn-round btn-lg btn-block" @click="authdata()">登录</a>
+                <Checkbox v-model="single"> ldap登录</Checkbox>
+                <a href="#pablo" class="btn btn-primary btn-round btn-lg btn-block" @click="authdata()">
+                 登录</a>
               </div>
             </form>
           </div>
@@ -101,34 +104,29 @@
               </li>
               <li>
                 <a href="https://www.gnu.org/licenses/agpl-3.0.en.html" class="nav-link">
-                  开源许可:AGPL3.0
+                  AGPL3.0
                 </a>
               </li>
             </ul>
           </nav>
-          <div class="copyright">&copy; 2019 HenryYee 请使用Chrome浏览器获得最佳体验</div>
+          <div class="copyright"> © 2019 HenryYee 请使用Chrome浏览器获得最佳体验</div>
         </div>
       </footer>
     </div>
 
-    <Modal
-            v-model="register"
-            @on-ok="LoginRegister"
-            title="用户注册"
-            ok-text="注册"
-            :mask-closable="false">
+    <Modal v-model="register" @on-ok="LoginRegister" title="注册" ok-text="注册" :mask-closable="false">
       <Form ref="userinfova" :model="userinfo" :rules="userinfoValidate">
 
-        <FormItem label="用户名:" prop="username">
+        <FormItem label="请输入用户名" prop="username">
           <Input v-model="userinfo.username"></Input>
         </FormItem>
 
-        <FormItem label="密码" prop="password">
+        <FormItem label="请输入密码" prop="password">
           <Input type="password" v-model="userinfo.password"
                  @on-keyup.enter="authdata()"></Input>
         </FormItem>
 
-        <FormItem label="确认密码" prop="confirmpassword">
+        <FormItem label="请确认新密码" prop="confirmpassword">
           <Input v-model="userinfo.confirmpassword" type="password"></Input>
         </FormItem>
 
@@ -136,11 +134,11 @@
           <Input v-model="userinfo.realname"></Input>
         </FormItem>
 
-        <FormItem prop="department" label="部门名称">
+        <FormItem prop="department" label="部门">
           <Input v-model="userinfo.department"></Input>
         </FormItem>
 
-        <FormItem prop="email" label="电子邮件">
+        <FormItem prop="email" label="电子邮箱">
           <Input v-model="userinfo.email"></Input>
         </FormItem>
       </Form>
@@ -170,13 +168,13 @@
 </template>
 <script>
     import axios from 'axios'
-    //
+
     export default {
         name: 'Login',
         data() {
             const valideuserinfoPassword = (rule, value, callback) => {
                 if (value !== this.userinfo.password) {
-                    callback(new Error('两次输入密码不一致'))
+                    callback(new Error("输入的密码不一致"))
                 } else {
                     callback()
                 }
@@ -184,7 +182,7 @@
             const regExp_password = (rule, value, callback) => {
                 let pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).*$/;
                 if (!pPattern.test(this.userinfo.password)) {
-                    callback(new Error('至少1个大写字母,1个小写字母,1个数字'))
+                    callback(new Error("至少1个大写字母，1个小写字母，1个数字"))
                 } else {
                     callback()
                 }
@@ -206,24 +204,24 @@
                     username: [
                         {
                             required: true,
-                            message: '请输入用户名',
+                            message: "请输入用户名",
                             trigger: 'blur'
                         }
                     ],
                     password: [
                         {
                             required: true,
-                            message: '请输入密码',
+                            message: "请输入密码",
                             trigger: 'blur'
                         },
                         {
                             min: 6,
-                            message: '请至少输入6个字符',
+                            message: "请输入至少6个字符",
                             trigger: 'blur'
                         },
                         {
                             max: 32,
-                            message: '最多输入32个字符',
+                            message: "最多输入32个字符",
                             trigger: 'blur'
                         },
                         {
@@ -234,7 +232,7 @@
                     confirmpassword: [
                         {
                             required: true,
-                            message: '请再次输入新密码',
+                            message: "请确认新密码",
                             trigger: 'blur'
                         },
                         {
@@ -245,44 +243,25 @@
                     realname: [
                         {
                             required: true,
-                            message: '请输入真实姓名',
+                            message: "请输入真实姓名",
                             trigger: 'blur'
                         }
                     ],
                     department: [
                         {
                             required: true,
-                            message: '请输入部门名称',
+                            message: "请输入部门名",
                             trigger: 'blur'
                         }
                     ],
                     email: [
-                        {required: true, message: '请输入邮箱地址', trigger: 'blur'},
-                        {type: 'email', message: '邮箱格式错误', trigger: 'blur'}
+                        {required: true, message: "请输入E-mail", trigger: 'blur'},
+                        {type: 'email', message: "E-mail格式错误", trigger: 'blur'}
                     ]
                 },
                 formInline: {
                     user: '',
                     password: ''
-                },
-                ruleInline: {
-                    user: [{
-                        required: true,
-                        message: '请填写用户名',
-                        trigger: 'blur'
-                    }],
-                    password: [{
-                        required: true,
-                        message: '请填写密码',
-                        trigger: 'blur'
-                    },
-                        {
-                            type: 'string',
-                            min: 6,
-                            message: '密码长度不能小于6位',
-                            trigger: 'blur'
-                        }
-                    ]
                 }
             }
         },
@@ -301,7 +280,7 @@
                                 this.$config.err_notice(this, error)
                             })
                     } else {
-                        this.$config.err_notice(this, '请正确填写相关注册信息！')
+                        this.$config.err_notice("请正确填写相关注册信息")
                     }
                 })
             },

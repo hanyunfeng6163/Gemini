@@ -9,15 +9,32 @@
           <Icon type="md-sync"></Icon>
           autoTask
         </p>
-        <Button type="success" @click="toggleShow">新建Task</Button>
-        <br>
-        <br>
+        <Form inline>
+          <FormItem>
+          </FormItem>
+          <FormItem>
+            <Button type="warning" @click="toggleShow">新建Task</Button>
+          </FormItem>
+          <FormItem>
+            <Input placeholder="AutoTask名称" v-model="find.text"></Input>
+          </FormItem>
+          <FormItem>
+            <Button type="success" @click="queryData">查询</Button>
+            <Button type="primary" @click="queryCancel" class="margin-left-10">重置</Button>
+          </FormItem>
+        </Form>
         <Table :columns="task_columns" :data="task_data">
           <template slot-scope="{ row }" slot="tp">
             <Tag checkable color="primary" v-if="row.Tp === 0">Insert</Tag>
             <Tag checkable color="warning" v-if="row.Tp === 1">Update</Tag>
             <Tag checkable color="error" v-if="row.Tp === 2">Delete</Tag>
           </Template>
+          <template slot-scope="{ row }" slot="status">
+            <i-switch v-model="row.Status" @on-change="activityStatus(row)">
+              <span slot="open">开</span>
+              <span slot="close">关</span>
+            </i-switch>
+          </template>
           <template slot-scope="{ row }" slot="action">
             <Button type="primary" @click="openEditModal(row)">编辑</Button>
             <Poptip
@@ -26,7 +43,7 @@
                     @on-ok="delAutoTask(row)"
                     transfer
             >
-            <Button type="error" class="margin-left-10">删除</Button>
+              <Button type="error" class="margin-left-10">删除</Button>
             </Poptip>
           </template>
         </Table>
@@ -46,17 +63,17 @@
           </Select>
         </FormItem>
         <FormItem label="数据源" prop="source">
-          <Select v-model="formItem.source" @on-change="fetchBase">
+          <Select v-model="formItem.source" @on-change="fetchBase" filterable>
             <Option v-for="i in fetchData.source" :key="i.Source" :value="i.Source">{{i.Source}}</Option>
           </Select>
         </FormItem>
         <FormItem label="库" prop="database">
-          <Select v-model="formItem.database" @on-change="fetchTable">
+          <Select v-model="formItem.database" @on-change="fetchTable" filterable>
             <Option v-for="i in fetchData.base" :key="i" :value="i">{{i}}</Option>
           </Select>
         </FormItem>
         <FormItem label="表" prop="table">
-          <Select v-model="formItem.table">
+          <Select v-model="formItem.table" filterable>
             <Option v-for="i in fetchData.table" :key="i" :value="i">{{i}}</Option>
           </Select>
         </FormItem>
@@ -122,6 +139,11 @@
                         key: 'Affectrow',
                     },
                     {
+                        title: '状态',
+                        key: 'status',
+                        slot: 'status'
+                    },
+                    {
                         title: '操作',
                         key: 'action',
                         slot: 'action'
@@ -129,6 +151,7 @@
                 ],
                 task_data: [],
                 pg: 1,
+                wordList: [],
                 formItem: {
                     name: '',
                     source: '',
@@ -136,7 +159,8 @@
                     table: '',
                     tp: 0,
                     row: 1
-                }
+                },
+                find: {}
             }
         },
         methods: {
@@ -148,7 +172,7 @@
                         })
                             .then(res => {
                                 this.$config.notice(res.data);
-                                this.fetchAutoTaskList();
+                                this.fetchAutoTaskList(this.$refs.page.currentPage);
                             })
                             .catch(err => this.$config.err_notice(this, err))
                     } else {
@@ -157,9 +181,15 @@
                 })
             },
             fetchAutoTaskList(vl = 1) {
-                axios.get(`${this.$config.url}/auto/fetch?page=${vl}`)
+                axios.put(`${this.$config.url}/auto/fetch`, {
+                    page: vl,
+                    find: this.find
+                })
                     .then(res => {
                         this.task_data = res.data.data;
+                        this.task_data.forEach((item) => {
+                            (item.Status === 1) ? item.Status = true : item.Status = false
+                        });
                         this.pg = res.data.pg
                     })
             },
@@ -180,11 +210,35 @@
                 }
             },
             delAutoTask(vl) {
+                let step = this.$refs.page.currentPage;
+                if (this.task_data.length === 1) {
+                    step = step - 1
+                }
                 axios.delete(`${this.$config.url}/auto/${vl.ID}`)
                     .then(res => {
                         this.$config.notice(res.data);
-                        this.fetchAutoTaskList()
+                        this.fetchAutoTaskList(step)
                     })
+                    .catch(err => this.$config.err_notice(this, err))
+            },
+            queryData() {
+                this.find.valve = true;
+                this.fetchAutoTaskList();
+            },
+            queryCancel() {
+                this.find = this.$config.clearPicker(this.find);
+                this.fetchAutoTaskList();
+            },
+            activityStatus(vl) {
+                let s = 0;
+                if (vl.Status) {
+                    s = 1
+                }
+
+                axios.post(`${this.$config.url}/auto/active`, {
+                    'Tp': {'id': vl.ID, 'status': s}
+                })
+                    .then(res => this.$config.notice(res.data))
                     .catch(err => this.$config.err_notice(this, err))
             }
         },

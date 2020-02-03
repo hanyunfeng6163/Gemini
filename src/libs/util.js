@@ -157,7 +157,7 @@ util.showThisRoute = function (itAccess, currentAccess) {
     } else {
         return itAccess === currentAccess
     }
-}
+};
 
 util.openPage = function (vm, name) {
     vm.$router.push({name: name});
@@ -202,7 +202,7 @@ util.clearObj = function (obj) {
 util.clearOption = function (obj) {
     for (let i in obj) {
         if (typeof obj[i] === 'object') {
-            obj[i] = ['']
+            obj[i] = []
         } else if (typeof obj[i] === 'string') {
             obj[i] = '0'
         } else if (typeof obj[i] === 'number') {
@@ -232,6 +232,14 @@ util.sameMerge = function (obj, merge, el) {
         obj[i] = merge[i]
     }
     return obj
+};
+
+util.concat = function (arr1, arr2) {
+    let arr = arr1.concat();
+    for (let i = 0; i < arr2.length; i++) {
+        arr.indexOf(arr2[i]) === -1 ? arr.push(arr2[i]) : 0;
+    }
+    return arr;
 };
 
 export default util

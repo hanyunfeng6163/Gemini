@@ -79,6 +79,12 @@
                               <span slot="close">关</span>
                             </i-switch>
                           </FormItem>
+                          <FormItem label="开启最小化回滚语句生成">
+                            <i-switch size="large" v-model="juno.DMLMinimalRollback">
+                              <span slot="open">开</span>
+                              <span slot="close">关</span>
+                            </i-switch>
+                          </FormItem>
                         </Form>
                       </Col>
                       <Col span="6">
@@ -153,6 +159,12 @@
                               <span slot="close">关</span>
                             </i-switch>
                           </FormItem>
+                          <FormItem label="检查类型隐式转换">
+                            <i-switch size="large" v-model="juno.DDLImplicitTypeConversion">
+                              <span slot="open">开</span>
+                              <span slot="close">关</span>
+                            </i-switch>
+                          </FormItem>
                           <FormItem label="单个索引指定字段上限">
                             <InputNumber :min="0" v-model="juno.DDLMaxKeyParts"></InputNumber>
                           </FormItem>
@@ -208,6 +220,24 @@
                           </FormItem>
                           <FormItem label="dml语句禁用select">
                             <i-switch size="large" v-model="juno.DMLSelect">
+                              <span slot="open">开</span>
+                              <span slot="close">关</span>
+                            </i-switch>
+                          </FormItem>
+                          <FormItem label="允许创建视图">
+                            <i-switch size="large" v-model="juno.AllowCreateView">
+                              <span slot="open">开</span>
+                              <span slot="close">关</span>
+                            </i-switch>
+                          </FormItem>
+                          <FormItem label="允许创建分区表">
+                            <i-switch size="large" v-model="juno.AllowCreatePartition">
+                              <span slot="open">开</span>
+                              <span slot="close">关</span>
+                            </i-switch>
+                          </FormItem>
+                          <FormItem label="允许bit,enum,set类型">
+                            <i-switch size="large" v-model="juno.AllowSpecialType">
                               <span slot="open">开</span>
                               <span slot="close">关</span>
                             </i-switch>
