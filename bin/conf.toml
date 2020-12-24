@@ -1,0 +1,9 @@
+[Mysql]
+Db = "audit_test"
+Host = "127.0.0.1"
+Port = "3377"
+Password = "#IjjoDyIk^&yITf7"
+User = "root"
+
+[General]
+SecretKey = "dbcjqheupqjsuwsm"
