@@ -38,6 +38,11 @@
                         class="margin-left-10">
                   执行信息
                 </Button>
+				{{row}}
+				<Button type="info" @click="openOrder(row)" size="small" v-if="true" class="margin-left-10">
+												流转
+				</Button>
+				
                 <Poptip
                         confirm
                         title="确定要撤销工单吗？"
@@ -197,7 +202,7 @@
                         title: 'sql',
                         key: 'SQL'
                     }
-                ]
+                ],
             }
         },
         methods: {

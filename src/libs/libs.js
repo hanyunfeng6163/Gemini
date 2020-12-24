@@ -147,6 +147,7 @@ libs.register = '/register';
 libs.auth = '/login';
 libs.gen = '';
 
+
 libs.openPage = function (vm, name) {
     vm.$router.push({name: name});
     vm.$store.commit('breadcrumb_set', name);

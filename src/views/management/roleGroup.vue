@@ -14,7 +14,7 @@
           <Button @click="queryCancel" type="warning" class="margin-left-10">重置</Button>
           <br>
           <br>
-          <Table border :columns="columns" :data="data6" stripe height="550">
+          <Table border :columns="columns" :data="table_data" stripe height="550">
             <template slot-scope="{ row }" slot="action">
               <Button type="info" size="small" @click="editAuthGroup(row)" style="margin-right: 5px">
                 查看与编辑
@@ -205,7 +205,7 @@
             refreshgroup(vl = 1) {
                 axios.get(`${this.$config.url}/group?page=${vl}&con=${JSON.stringify(this.query)}&tp=1`)
                     .then(res => {
-                        this.data6 = res.data.group_list;
+                        this.table_data = res.data.data2;
                         this.pagenumber = parseInt(res.data.page);
                         this.connectionList.connection = res.data.source;
                         this.connectionList.query = res.data.query;
